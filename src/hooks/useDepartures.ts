@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getStationboard, filterByLine, getMinutesUntilDeparture } from '../services/api';
 import { sendNotification } from '../services/notifications';
+import { useLang } from '../LangContext';
 import type { StationboardEntry, WatchedStop } from '../types';
 
 const POLL_INTERVAL = 30_000; // 30 seconds
@@ -15,6 +16,7 @@ export function useDepartures(watchedStops: WatchedStop[]) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastNotified, setLastNotified] = useState<Map<string, number>>(new Map());
+  const { t } = useLang();
 
   const fetchDepartures = useCallback(async () => {
     if (watchedStops.length === 0) {
@@ -65,8 +67,8 @@ export function useDepartures(watchedStops: WatchedStop[]) {
 
           if (shouldNotify && now - lastTime > 60_000) {
             sendNotification(
-              `Bus ${stop.lineNumber} dans ${nextDep.minutesUntil} min`,
-              `Partez maintenant ! ${stop.stationName} → ${nextDep.entry.to}. Temps de marche : ${stop.walkTimeMinutes} min.`
+              t.notifTitle(stop.lineNumber, nextDep.minutesUntil),
+              t.notifBody(stop.stationName, nextDep.entry.to, stop.walkTimeMinutes)
             );
             setLastNotified((prev) => new Map(prev).set(stop.id, now));
           }
@@ -75,11 +77,11 @@ export function useDepartures(watchedStops: WatchedStop[]) {
 
       setDepartures(newDepartures);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erreur lors du chargement des départs');
+      setError(e instanceof Error ? e.message : t.fetchError);
     } finally {
       setLoading(false);
     }
-  }, [watchedStops, lastNotified]);
+  }, [watchedStops, lastNotified, t]);
 
   useEffect(() => {
     fetchDepartures();

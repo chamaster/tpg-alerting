@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getNotificationStatus, requestNotificationPermission } from '../services/notifications';
+import { useLang } from '../LangContext';
 
 export default function NotificationBanner() {
   const [status, setStatus] = useState(getNotificationStatus());
+  const { t } = useLang();
 
   useEffect(() => {
     setStatus(getNotificationStatus());
@@ -13,9 +15,7 @@ export default function NotificationBanner() {
   return (
     <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex items-center justify-between">
       <div className="text-sm text-amber-800">
-        {status === 'denied'
-          ? 'Les notifications sont bloquées. Activez-les dans les paramètres de votre navigateur pour recevoir les alertes de départ.'
-          : 'Activez les notifications pour être alerté quand il est temps de partir pour votre bus.'}
+        {status === 'denied' ? t.notifBlocked : t.notifPrompt}
       </div>
       {status === 'default' && (
         <button
@@ -25,7 +25,7 @@ export default function NotificationBanner() {
           }}
           className="ml-3 bg-amber-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors whitespace-nowrap"
         >
-          Activer
+          {t.enable}
         </button>
       )}
     </div>

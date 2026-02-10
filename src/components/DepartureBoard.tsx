@@ -1,5 +1,6 @@
 import { isDelayed, getDepartureTime } from '../services/api';
 import { getLineColor, getLineTextColor } from '../utils/lineColors';
+import { useLang } from '../LangContext';
 import type { StationboardEntry, WatchedStop } from '../types';
 
 interface DepartureInfo {
@@ -26,6 +27,8 @@ export default function DepartureBoard({
   onToggleNotifications,
   onUpdateWalkTime,
 }: Props) {
+  const { t } = useLang();
+
   return (
     <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
       <div
@@ -61,7 +64,7 @@ export default function DepartureBoard({
           onClick={() => onRemove(stop.id)}
           className="hover:opacity-100 transition-opacity text-xl leading-none"
           style={{ color: stop.lineNumber ? getLineTextColor(stop.lineNumber) : '#FFFFFF', opacity: 0.7 }}
-          title="Supprimer"
+          title={t.remove}
         >
           &times;
         </button>
@@ -75,10 +78,10 @@ export default function DepartureBoard({
             onChange={() => onToggleNotifications(stop.id)}
             className="rounded accent-red-600"
           />
-          <span className="text-gray-700">Me notifier</span>
+          <span className="text-gray-700">{t.notifyMe}</span>
         </label>
         <label className="flex items-center gap-2">
-          <span className="text-gray-500">Temps de marche :</span>
+          <span className="text-gray-500">{t.walkTime}</span>
           <input
             type="number"
             min={1}
@@ -87,14 +90,14 @@ export default function DepartureBoard({
             onChange={(e) => onUpdateWalkTime(stop.id, Number(e.target.value))}
             className="w-14 px-2 py-0.5 border border-gray-300 rounded text-center text-sm"
           />
-          <span className="text-gray-500">min</span>
+          <span className="text-gray-500">{t.min}</span>
         </label>
       </div>
 
       <div className="divide-y divide-gray-100">
         {departures.length === 0 ? (
           <div className="px-4 py-6 text-center text-gray-400">
-            Aucun départ à venir
+            {t.noDepartures}
           </div>
         ) : (
           departures.slice(0, 6).map((dep, i) => {
@@ -119,21 +122,21 @@ export default function DepartureBoard({
                           : 'text-gray-900'
                     }`}
                   >
-                    {dep.minutesUntil === 0 ? 'Maint.' : `${dep.minutesUntil}'`}
+                    {dep.minutesUntil === 0 ? t.now : `${dep.minutesUntil}'`}
                   </div>
                   <div>
                     <div className="text-gray-700">→ {dep.entry.to}</div>
                     <div className="text-xs text-gray-400">
                       {formatTime(depTime)}
                       {delayed && (
-                        <span className="ml-2 text-orange-500 font-medium">retardé</span>
+                        <span className="ml-2 text-orange-500 font-medium">{t.delayed}</span>
                       )}
                     </div>
                   </div>
                 </div>
                 {urgent && dep.minutesUntil > 0 && (
                   <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium">
-                    Partez !
+                    {t.leaveNow}
                   </span>
                 )}
               </div>

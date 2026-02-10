@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { searchStations, getStationboard } from '../services/api';
 import { getLineColor, getLineTextColor } from '../utils/lineColors';
+import { useLang } from '../LangContext';
 import type { Station, WatchedStop } from '../types';
 
 interface Props {
@@ -20,6 +21,7 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
   const [selectedDirection, setSelectedDirection] = useState('');
   const [walkTime, setWalkTime] = useState(5);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const { t } = useLang();
 
   useEffect(() => {
     if (!open) {
@@ -104,29 +106,28 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Ajouter un arrêt</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{t.addStop}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">
             &times;
           </button>
         </div>
 
         <div className="p-5 space-y-4">
-          {/* Step 1: Search station */}
           {!selectedStation ? (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Rechercher un arrêt
+                {t.searchStop}
               </label>
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="ex. Petit-Veyrier, Bel-Air..."
+                placeholder={t.searchPlaceholder}
                 autoFocus
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
               />
               {searching && (
-                <p className="text-sm text-gray-400 mt-2">Recherche...</p>
+                <p className="text-sm text-gray-400 mt-2">{t.searching}</p>
               )}
               {stations.length > 0 && (
                 <ul className="mt-2 border border-gray-200 rounded-lg divide-y divide-gray-100 max-h-48 overflow-y-auto">
@@ -145,7 +146,6 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
             </div>
           ) : (
             <>
-              {/* Selected station header */}
               <div className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
                 <span className="font-medium text-gray-900">{selectedStation.name}</span>
                 <button
@@ -157,17 +157,16 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                   }}
                   className="text-sm text-red-600 hover:text-red-800"
                 >
-                  Changer
+                  {t.change}
                 </button>
               </div>
 
-              {/* Step 2: Select line */}
               {loadingLines ? (
-                <p className="text-sm text-gray-400">Chargement des lignes...</p>
+                <p className="text-sm text-gray-400">{t.loadingLines}</p>
               ) : (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Ligne (optionnel)
+                    {t.selectLine}
                   </label>
                   <div className="flex flex-wrap gap-2">
                     <button
@@ -178,7 +177,7 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                           : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                       }`}
                     >
-                      Toutes
+                      {t.allLines}
                     </button>
                     {lines.map((l) => (
                       <button
@@ -201,11 +200,10 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                 </div>
               )}
 
-              {/* Step 3: Select direction */}
               {selectedLine && availableDirections.length > 0 && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Direction (optionnel)
+                    {t.direction}
                   </label>
                   <div className="space-y-1">
                     <button
@@ -220,7 +218,7 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                         : undefined
                       }
                     >
-                      Les deux directions
+                      {t.bothDirections}
                     </button>
                     {availableDirections.map((dir) => (
                       <button
@@ -243,10 +241,9 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                 </div>
               )}
 
-              {/* Step 4: Walk time */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Temps de marche jusqu'à l'arrêt (minutes)
+                  {t.walkTimeLabel}
                 </label>
                 <input
                   type="range"
@@ -261,12 +258,11 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                 </div>
               </div>
 
-              {/* Add button */}
               <button
                 onClick={handleAdd}
                 className="w-full bg-red-600 text-white py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors"
               >
-                Ajouter l'arrêt
+                {t.addStopButton}
               </button>
             </>
           )}
