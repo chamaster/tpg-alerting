@@ -85,7 +85,7 @@ const translations = {
       `Leave now! ${station} → ${to}. Walk time: ${walk} min.`,
     fetchError: 'Failed to fetch departures',
   },
-} as const;
+};
 
 export type Lang = keyof typeof translations;
 export type Translations = typeof translations['fr'];
