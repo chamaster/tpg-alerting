@@ -61,7 +61,7 @@ export default function DepartureBoard({
           onClick={() => onRemove(stop.id)}
           className="hover:opacity-100 transition-opacity text-xl leading-none"
           style={{ color: stop.lineNumber ? getLineTextColor(stop.lineNumber) : '#FFFFFF', opacity: 0.7 }}
-          title="Remove"
+          title="Supprimer"
         >
           &times;
         </button>
@@ -75,10 +75,10 @@ export default function DepartureBoard({
             onChange={() => onToggleNotifications(stop.id)}
             className="rounded accent-red-600"
           />
-          <span className="text-gray-700">Notify me</span>
+          <span className="text-gray-700">Me notifier</span>
         </label>
         <label className="flex items-center gap-2">
-          <span className="text-gray-500">Walk time:</span>
+          <span className="text-gray-500">Temps de marche :</span>
           <input
             type="number"
             min={1}
@@ -94,7 +94,7 @@ export default function DepartureBoard({
       <div className="divide-y divide-gray-100">
         {departures.length === 0 ? (
           <div className="px-4 py-6 text-center text-gray-400">
-            No upcoming departures
+            Aucun départ à venir
           </div>
         ) : (
           departures.slice(0, 6).map((dep, i) => {
@@ -119,21 +119,21 @@ export default function DepartureBoard({
                           : 'text-gray-900'
                     }`}
                   >
-                    {dep.minutesUntil === 0 ? 'Now' : `${dep.minutesUntil}'`}
+                    {dep.minutesUntil === 0 ? 'Maint.' : `${dep.minutesUntil}'`}
                   </div>
                   <div>
                     <div className="text-gray-700">→ {dep.entry.to}</div>
                     <div className="text-xs text-gray-400">
                       {formatTime(depTime)}
                       {delayed && (
-                        <span className="ml-2 text-orange-500 font-medium">delayed</span>
+                        <span className="ml-2 text-orange-500 font-medium">retardé</span>
                       )}
                     </div>
                   </div>
                 </div>
                 {urgent && dep.minutesUntil > 0 && (
                   <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium">
-                    Leave now!
+                    Partez !
                   </span>
                 )}
               </div>

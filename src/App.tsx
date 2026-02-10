@@ -46,14 +46,14 @@ function App() {
       <header className="bg-red-700 text-white shadow-lg">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">TPG Departures</h1>
-            <p className="text-red-200 text-sm">Geneva bus & tram alerts</p>
+            <h1 className="text-xl font-bold tracking-tight">Départs TPG</h1>
+            <p className="text-red-200 text-sm">Alertes bus & trams Genève</p>
           </div>
           <button
             onClick={refresh}
             disabled={loading}
             className="text-red-200 hover:text-white transition-colors disabled:opacity-50"
-            title="Refresh"
+            title="Actualiser"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -86,15 +86,15 @@ function App() {
         {watchedStops.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🚌</div>
-            <h2 className="text-xl font-semibold text-gray-700 mb-2">No stops added yet</h2>
+            <h2 className="text-xl font-semibold text-gray-700 mb-2">Aucun arrêt ajouté</h2>
             <p className="text-gray-500 mb-6">
-              Add a stop to see upcoming departures and get notified when to leave.
+              Ajoutez un arrêt pour voir les prochains départs et être notifié quand partir.
             </p>
             <button
               onClick={() => setModalOpen(true)}
               className="bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors shadow-md"
             >
-              Add your first stop
+              Ajouter votre premier arrêt
             </button>
           </div>
         ) : (
@@ -118,7 +118,7 @@ function App() {
         <button
           onClick={() => setModalOpen(true)}
           className="fixed bottom-6 right-6 bg-red-600 text-white w-14 h-14 rounded-full shadow-lg hover:bg-red-700 transition-colors flex items-center justify-center text-3xl"
-          title="Add a stop"
+          title="Ajouter un arrêt"
         >
           +
         </button>

@@ -65,8 +65,8 @@ export function useDepartures(watchedStops: WatchedStop[]) {
 
           if (shouldNotify && now - lastTime > 60_000) {
             sendNotification(
-              `Bus ${stop.lineNumber} in ${nextDep.minutesUntil} min`,
-              `Leave now! ${stop.stationName} → ${nextDep.entry.to}. Walk time: ${stop.walkTimeMinutes} min.`
+              `Bus ${stop.lineNumber} dans ${nextDep.minutesUntil} min`,
+              `Partez maintenant ! ${stop.stationName} → ${nextDep.entry.to}. Temps de marche : ${stop.walkTimeMinutes} min.`
             );
             setLastNotified((prev) => new Map(prev).set(stop.id, now));
           }
@@ -75,7 +75,7 @@ export function useDepartures(watchedStops: WatchedStop[]) {
 
       setDepartures(newDepartures);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to fetch departures');
+      setError(e instanceof Error ? e.message : 'Erreur lors du chargement des départs');
     } finally {
       setLoading(false);
     }
