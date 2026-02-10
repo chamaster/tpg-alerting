@@ -1,4 +1,5 @@
 import { isDelayed, getDepartureTime } from '../services/api';
+import { getLineColor, getLineTextColor } from '../utils/lineColors';
 import type { StationboardEntry, WatchedStop } from '../types';
 
 interface DepartureInfo {
@@ -27,21 +28,39 @@ export default function DepartureBoard({
 }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 px-4 py-3 flex items-center justify-between">
+      <div
+        className={`px-4 py-3 flex items-center justify-between ${!stop.lineNumber ? 'bg-gray-700' : ''}`}
+        style={stop.lineNumber ? {
+          backgroundColor: getLineColor(stop.lineNumber),
+        } : undefined}
+      >
         <div className="flex items-center gap-3">
-          <span className="bg-white text-red-700 font-bold rounded-lg px-3 py-1 text-lg">
-            {stop.lineNumber || 'All'}
-          </span>
-          <div className="text-white">
+          {stop.lineNumber ? (
+            <span
+              className="font-bold rounded-lg px-3 py-1 text-lg"
+              style={{
+                backgroundColor: '#FFFFFF',
+                color: getLineColor(stop.lineNumber),
+              }}
+            >
+              {stop.lineNumber}
+            </span>
+          ) : (
+            <span className="bg-white text-gray-700 font-bold rounded-lg px-3 py-1 text-lg">
+              All
+            </span>
+          )}
+          <div style={{ color: stop.lineNumber ? getLineTextColor(stop.lineNumber) : '#FFFFFF' }}>
             <div className="font-semibold">{stop.stationName}</div>
             {stop.direction && (
-              <div className="text-red-100 text-sm">→ {stop.direction}</div>
+              <div className="text-sm" style={{ opacity: 0.8 }}>→ {stop.direction}</div>
             )}
           </div>
         </div>
         <button
           onClick={() => onRemove(stop.id)}
-          className="text-red-200 hover:text-white transition-colors text-xl leading-none"
+          className="hover:opacity-100 transition-opacity text-xl leading-none"
+          style={{ color: stop.lineNumber ? getLineTextColor(stop.lineNumber) : '#FFFFFF', opacity: 0.7 }}
           title="Remove"
         >
           &times;

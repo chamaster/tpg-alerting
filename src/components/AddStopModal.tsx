@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { searchStations, getStationboard } from '../services/api';
+import { getLineColor, getLineTextColor } from '../utils/lineColors';
 import type { Station, WatchedStop } from '../types';
 
 interface Props {
@@ -173,8 +174,8 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                       onClick={() => { setSelectedLine(''); setSelectedDirection(''); }}
                       className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                         selectedLine === ''
-                          ? 'bg-red-600 text-white border-red-600'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-red-300'
+                          ? 'bg-gray-700 text-white border-gray-700'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                       }`}
                     >
                       All lines
@@ -183,11 +184,15 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                       <button
                         key={l.number}
                         onClick={() => { setSelectedLine(l.number); setSelectedDirection(''); }}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+                        className={`px-3 py-1.5 rounded-lg text-sm font-bold border transition-colors ${
                           selectedLine === l.number
-                            ? 'bg-red-600 text-white border-red-600'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-red-300'
+                            ? 'border-transparent'
+                            : 'border-gray-300 hover:opacity-80'
                         }`}
+                        style={selectedLine === l.number
+                          ? { backgroundColor: getLineColor(l.number), color: getLineTextColor(l.number), borderColor: getLineColor(l.number) }
+                          : { backgroundColor: getLineColor(l.number) + '18', color: getLineColor(l.number) }
+                        }
                       >
                         {l.number}
                       </button>
@@ -207,9 +212,13 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                       onClick={() => setSelectedDirection('')}
                       className={`w-full text-left px-3 py-2 rounded-lg text-sm border transition-colors ${
                         selectedDirection === ''
-                          ? 'bg-red-600 text-white border-red-600'
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-red-300'
+                          ? 'border-transparent text-white'
+                          : 'bg-white text-gray-700 border-gray-300'
                       }`}
+                      style={selectedDirection === ''
+                        ? { backgroundColor: getLineColor(selectedLine), borderColor: getLineColor(selectedLine) }
+                        : undefined
+                      }
                     >
                       Both directions
                     </button>
@@ -219,9 +228,13 @@ export default function AddStopModal({ open, onClose, onAdd }: Props) {
                         onClick={() => setSelectedDirection(dir)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-sm border transition-colors ${
                           selectedDirection === dir
-                            ? 'bg-red-600 text-white border-red-600'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-red-300'
+                            ? 'border-transparent text-white'
+                            : 'bg-white text-gray-700 border-gray-300'
                         }`}
+                        style={selectedDirection === dir
+                          ? { backgroundColor: getLineColor(selectedLine), borderColor: getLineColor(selectedLine) }
+                          : undefined
+                        }
                       >
                         → {dir}
                       </button>
